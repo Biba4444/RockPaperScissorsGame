@@ -1,32 +1,29 @@
 import random
+import math
 from exceptions import GameOverException, EnemyDownException
+import settings
 
 class Player:
     def __init__(self, name):
         self.name = name
-        self.lives = lives
+        self.lives = settings.PLAYER_LIVES
         self.score = 0
     
-    def select_attack(self, attack):
+    def select_attack(self):
         while True:
             try:
-                input(f"{self.name}, choose your attack: 1 for Rock, 2 for Paper, 3 for Scissors: ")
-                if attack == 1:
-                    return "Rock"
-                elif attack == 2:
-                    return "Paper"
-                elif attack == 3:
-                    return "Scissors"
+                attack = input(f"{self.name}, choose your attack: 1 for Rock, 2 for Paper, 3 for Scissors: ")
+                if attack in settings.ALLOWED_ATTACKS:
+                    return settings.ALLOWED_ATTACKS[attack]
                 else:
                     print("Invalid choice. Please select again.")
-                    return self.select_attack(attack)
-            except ValueError:
-                print("Invalid input. Please enter a number.")
-                continue
-           
+            except Exception as e:
+                print(f"An error occurred: {e}")
+        
     def decrease_life(self):
         self.lives -= 1
         if self.lives == 0:
+            print(f"{self.name} has no lives left!")
             raise GameOverException()
         
     def add_score(self, points):
@@ -38,20 +35,15 @@ class Enemy:
     def __init__(self, level, hardness):
         self.level = level
         self.hardness = hardness
-        self.lives = lives
+        self.lives = math.floor(settings.PLAYER_LIVES * self.hardness * (self.level * settings.EACH_LEVEL_MULTIPLIER))
          
     def select_attack(self):
         attack = random.randint(1, 3)
-        if attack == 1:
-            return "Rock"
-        elif attack == 2:
-            return "Paper"
-        elif attack == 3:
-            return "Scissors"
+        attack_str = str(attack)
+        return settings.ALLOWED_ATTACKS.get(attack_str, "Unknown Attack")
     
     def decrease_life(self):
         self.lives -= 1
         if self.lives == 0:
+            print(f"Enemy defeated!")
             raise EnemyDownException()
-        
-        
