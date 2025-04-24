@@ -1,18 +1,17 @@
 from models import Enemy, Player
+import settings
 
 class Game:
-    def __init__(self, player, mode):
+    def __init__(self, player, mode, level=1):
         self.player = Player(input("Enter your name: "))
         self.mode = mode
-        self.enemy = Enemy("Default Enemy", 100, 10)
+        self.level = level
+        self.enemy = None
     
     def create_enemy(self):
-        if self.mode == "easy":
-            self.enemy = Enemy("Easy Enemy", 50, 5)
-        elif self.mode == "medium":
-            self.enemy = Enemy("Medium Enemy", 100, 10)
-        elif self.mode == "hard":
-            self.enemy = Enemy("Hard Enemy", 150, 15)
+        if self.mode in settings.MODES:
+            hardness = settings.MODES[self.mode]
+            self.enemy = Enemy(self.level, hardness)
         else:
             raise ValueError("Invalid game mode")
     
@@ -20,34 +19,34 @@ class Game:
         player_attack = self.player.select_attack()
         enemy_attack = self.enemy.select_attack()
         
-        if player_attack == enemy_attack:
-            print("It's a tie!")
-        elif (player_attack == "Rock" and enemy_attack == "Scissors") or \
-             (player_attack == "Paper" and enemy_attack == "Rock") or \
-             (player_attack == "Scissors" and enemy_attack == "Paper"):
+        outcome = settings.ATTACK_PAIRS_OUTCOME.get((player_attack, enemy_attack))
+        
+        score_for_fight = settings.POINTS_FOR_FIGHT * (self.level * settings.EACH_LEVEL_MULTIPLIER) * settings.MODES[self.mode]
+        
+        if outcome is None:
+            print("Invalid attack pair.")
+            return
+        if outcome == settings.WIN:
             print("You win this round!")
+            self.level += 1
             self.enemy.decrease_life()
-        else:
+            self.player.add_score(score_for_fight)
+        elif outcome == settings.DRAW:
+            print("It's a draw!")
+        elif outcome == settings.LOSE:
             print("Enemy wins this round!")
             self.player.decrease_life()
-        if self.player.lives == 0:
-            return -1
-        elif self.enemy.lives == 0:
-            return 1
-        else:
-            return 0
-        
+    
     def handle_fight_result(self):
-        if self.fight() == 1:
+        score_for_killing = settings.POINTS_FOR_KILLING * (self.level * settings.EACH_LEVEL_MULTIPLIER) * settings.MODES[self.mode]
+        if self.enemy.lives <= 0:
             print("Congratulations! You defeated the enemy.")
-            self.player.add_score(10)
-        elif self.fight() == -1:
+            self.player.add_score(score_for_killing)
+        elif self.player.lives <= 0:
             print("Unfortunately, you lost all your lives.")
-            self.player.add_score(0)
-            
+    
     def play(self):
         self.create_enemy()
         while self.player.lives > 0 and self.enemy.lives > 0:
             self.fight()
         self.handle_fight_result()
-        
