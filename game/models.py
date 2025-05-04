@@ -1,7 +1,8 @@
 import random
 import math
-from exceptions import GameOverException, EnemyDownException
-import settings
+from game.exceptions import GameOverException, EnemyDownException
+from game import settings
+from game import score_saver
 
 class Player:
     def __init__(self, name):
@@ -11,14 +12,13 @@ class Player:
     
     def select_attack(self):
         while True:
-            try:
-                attack = input(f"{self.name}, choose your attack: 1 for Rock, 2 for Paper, 3 for Scissors: ")
-                if attack in settings.ALLOWED_ATTACKS:
-                    return settings.ALLOWED_ATTACKS[attack]
-                else:
-                    print("Invalid choice. Please select again.")
-            except Exception as e:
-                print(f"An error occurred: {e}")
+            attack = input(f"{self.name}, choose your attack: 1 for Rock, 2 for Paper, 3 for Scissors (or type 'exit' to quit): ").strip()
+            if attack.lower() == 'exit':
+                print("Exiting attack selection.")
+                return None
+            if attack in settings.ALLOWED_ATTACKS:
+                return settings.ALLOWED_ATTACKS[attack]
+            print("Invalid choice. Please select again.")
         
     def decrease_life(self):
         self.lives -= 1
@@ -28,6 +28,11 @@ class Player:
         
     def add_score(self, points):
         self.score += points
+        score_handler = score_saver.ScoreHandler()
+        records = score_handler.read_scores()
+        game_record = score_saver.GameRecord(records)
+        game_record.add_record(self.name, self.score)
+        game_record.update_file()
             
 class Enemy:
     def __init__(self, level, hardness):
@@ -38,7 +43,9 @@ class Enemy:
     def select_attack(self):
         attack = random.randint(1, 3)
         attack_str = str(attack)
-        return settings.ALLOWED_ATTACKS.get(attack_str, "Unknown Attack")
+        if attack_str in settings.ALLOWED_ATTACKS:
+            return settings.ALLOWED_ATTACKS[attack_str]
+        raise ValueError(f"Invalid attack generated: {attack}")
     
     def decrease_life(self):
         self.lives -= 1

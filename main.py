@@ -1,5 +1,5 @@
 from game import game
-from game import score
+from game import score_saver
 
 
 def user_menu():
@@ -19,7 +19,7 @@ def create_player():
     return game.Player(player_name)
 
 def show_records():
-    score_handler = score.ScoreHandler()
+    score_handler = score_saver.ScoreHandler()
     records = score_handler.read_scores()
     if records:
         print("Game Records:")
@@ -40,4 +40,7 @@ def main():
                 break
             case _:
                 print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()
     
