@@ -2,8 +2,8 @@ from models import Enemy, Player
 import settings
 
 class Game:
-    def __init__(self, player, mode, level=1):
-        self.player = Player(input("Enter your name: "))
+    def __init__(self,player, mode, level=1):
+        self.player = Player(player)
         self.mode = mode
         self.level = level
         self.enemy = None

@@ -28,8 +28,6 @@ class Player:
         
     def add_score(self, points):
         self.score += points
-        with open("./score/score.txt", "w") as file:
-            file.write(f"{self.name}: {self.score} points\n")
             
 class Enemy:
     def __init__(self, level, hardness):
