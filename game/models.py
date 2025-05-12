@@ -5,14 +5,18 @@ from game import settings
 from game import score_saver
 
 class Player:
-    def __init__(self, name):
+    name: str
+    lives: int
+    score: float
+
+    def __init__(self, name: str) -> None:
         if not name or not name.strip():
             raise ValueError("Player name cannot be empty")
         self.name = name.strip()
         self.lives = settings.PLAYER_LIVES
-        self.score = 0
+        self.score = 0.0
     
-    def select_attack(self):
+    def select_attack(self) -> str:
         print("\nAvailable attacks:")
         print("1 - Rock")
         print("2 - Paper")
@@ -21,7 +25,7 @@ class Player:
         
         while True:
             try:
-                attack = input(f"\n{self.name}, choose your attack: ").strip().lower()
+                attack: str = input(f"\n{self.name}, choose your attack: ").strip().lower()
                 if attack == 'exit':
                     print("Exiting attack selection.")
                     return None
@@ -33,16 +37,16 @@ class Player:
                 print(f"Error during attack selection: {str(e)}")
                 print("Please try again.")
         
-    def decrease_life(self):
+    def decrease_life(self) -> None:
         self.lives -= 1
         if self.lives == 0:
             print(f"{self.name} has no lives left!")
             raise GameOverException()
         print(f"{self.name} has {self.lives} lives remaining.")
         
-    def add_score(self, points):
+    def add_score(self, points: float) -> None:
         try:
-            self.score += points
+            self.score += float(points)
             print(f"{self.name} earned {points} points! Total score: {self.score}")
             
             score_handler = score_saver.ScoreHandler()
@@ -53,7 +57,11 @@ class Player:
             print(f"Error saving score: {str(e)}")
                 
 class Enemy:
-    def __init__(self, level, hardness):
+    level: int
+    hardness: float
+    lives: int
+
+    def __init__(self, level: int, hardness: float) -> None:
         if level < 1:
             raise ValueError("Level must be at least 1")
         if hardness <= 0:
@@ -63,9 +71,9 @@ class Enemy:
         self.hardness = hardness
         self.lives = math.floor(settings.PLAYER_LIVES * self.hardness * (self.level * settings.EACH_LEVEL_MULTIPLIER))
          
-    def select_attack(self):
+    def select_attack(self) -> str:
         try:
-            attack = str(random.randint(1, 3))
+            attack: str = str(random.randint(1, 3))
             if attack not in settings.ALLOWED_ATTACKS:
                 raise ValueError(f"Invalid attack generated: {attack}")
             return settings.ALLOWED_ATTACKS[attack]
@@ -74,7 +82,7 @@ class Enemy:
             # Return a default attack in case of error
             return settings.ALLOWED_ATTACKS['1']
     
-    def decrease_life(self):
+    def decrease_life(self) -> None:
         self.lives -= 1
         if self.lives == 0:
             print("Enemy defeated!")

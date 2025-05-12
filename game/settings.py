@@ -1,48 +1,48 @@
 """Game settings and constants."""
 
 # Game modes
-MODE_NORMAL = 'Normal'
-MODE_HARD = 'Hard'
-MODES = {
+MODE_NORMAL: str = 'Normal'
+MODE_HARD: str = 'Hard'
+MODES: dict = {
     '1': MODE_NORMAL,
     '2': MODE_HARD
 }
-MODE_MULTIPLIERS = {
+MODE_MULTIPLIERS: dict = {
     MODE_NORMAL: 1,
     MODE_HARD: 2
 }
 
 # Player settings
-PLAYER_LIVES = 2
+PLAYER_LIVES: int = 2
 
 # Scoring
-POINTS_FOR_FIGHT = 1
-POINTS_FOR_KILLING = 5
-MAX_RECORDS_NUMBER = 5
-EACH_LEVEL_MULTIPLIER = 1.5
+POINTS_FOR_FIGHT: float = 1
+POINTS_FOR_KILLING: float = 5
+MAX_RECORDS_NUMBER: int = 5
+EACH_LEVEL_MULTIPLIER: float = 1.5
 
 # File settings
-SCORE_FILE = 'score.txt'
+SCORE_FILE: str = 'score.txt'
 
 # Attack types
-ROCK = 'Rock'
-PAPER = 'Paper'
-SCISSORS = 'Scissors'
+ROCK: str = 'Rock'
+PAPER: str = 'Paper'
+SCISSORS: str = 'Scissors'
 
 # Game outcomes
-WIN = 1
-DRAW = 0
-LOSE = -1
+WIN: int = 1
+DRAW: int = 0
+LOSE: int = -1
 
 # Attack mappings
-ALLOWED_ATTACKS = {
+ALLOWED_ATTACKS: dict = {
     '1': ROCK,
     '2': PAPER,
     '3': SCISSORS
 }
 
 # Attack outcomes matrix
-ATTACK_PAIRS_OUTCOME = {
+ATTACK_PAIRS_OUTCOME: dict = {
     (ROCK, ROCK): DRAW,
     (ROCK, PAPER): LOSE,
     (ROCK, SCISSORS): WIN,
