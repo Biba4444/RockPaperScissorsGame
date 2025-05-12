@@ -3,12 +3,14 @@ from game import settings
 from game.exceptions import GameOverException, EnemyDownException
 
 class Game:
+    """Main game class handling the game loop and logic."""
     player: Player
     mode: str
     level: float
     enemy: Enemy
 
     def __init__(self, player: Player, mode: str, level: float = 1) -> None:
+        """Initialize game with player, mode and starting level."""
         if mode not in settings.MODES:
             raise ValueError(f"Invalid mode: {mode}")
         if not isinstance(level, (int, float)):
@@ -20,10 +22,12 @@ class Game:
         self.enemy = None
     
     def create_enemy(self) -> None:
+        """Create new enemy based on current level."""
         hardness: float = settings.MODE_MULTIPLIERS[self.mode]
         self.enemy = Enemy(int(self.level), hardness)
     
     def fight(self) -> None:
+        """Handle one round of combat."""
         try:
             if self.enemy is None:
                 raise ValueError("Enemy not created")
@@ -62,6 +66,7 @@ class Game:
             print(f"An error occurred during the fight: {str(e)}")
     
     def handle_fight_result(self) -> None:
+        """Process the outcome of the fight."""
         try:
             if self.enemy is None:
                 raise ValueError("Enemy not created")
@@ -76,6 +81,7 @@ class Game:
             print(f"An error occurred while handling fight result: {str(e)}")
     
     def play(self) -> None:
+        """Start and run the main game loop."""
         try:
             self.create_enemy()
             print(f"\nStarting game at level {self.level}")

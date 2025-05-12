@@ -5,11 +5,13 @@ from game import settings
 from game import score_saver
 
 class Player:
+    """Player class representing the user in the game."""
     name: str
     lives: int
     score: float
 
     def __init__(self, name: str) -> None:
+        """Initialize player with name and default stats."""
         if not name or not name.strip():
             raise ValueError("Player name cannot be empty")
         self.name = name.strip()
@@ -17,6 +19,7 @@ class Player:
         self.score = 0.0
     
     def select_attack(self) -> str:
+        """Get player's attack choice."""
         print("\nAvailable attacks:")
         print("1 - Rock")
         print("2 - Paper")
@@ -38,6 +41,7 @@ class Player:
                 print("Please try again.")
         
     def decrease_life(self) -> None:
+        """Decrease player's life by 1."""
         self.lives -= 1
         if self.lives == 0:
             print(f"{self.name} has no lives left!")
@@ -45,6 +49,7 @@ class Player:
         print(f"{self.name} has {self.lives} lives remaining.")
         
     def add_score(self, points: float) -> None:
+        """Add points to player's score and save it."""
         try:
             self.score += float(points)
             print(f"{self.name} earned {points} points! Total score: {self.score}")
@@ -57,11 +62,13 @@ class Player:
             print(f"Error saving score: {str(e)}")
                 
 class Enemy:
+    """Enemy class with scaling difficulty."""
     level: int
     hardness: float
     lives: int
 
     def __init__(self, level: int, hardness: float) -> None:
+        """Initialize enemy with level and hardness."""
         if level < 1:
             raise ValueError("Level must be at least 1")
         if hardness <= 0:
@@ -72,6 +79,7 @@ class Enemy:
         self.lives = math.floor(settings.PLAYER_LIVES * self.hardness * (self.level * settings.EACH_LEVEL_MULTIPLIER))
          
     def select_attack(self) -> str:
+        """Generate random enemy attack."""
         try:
             attack: str = str(random.randint(1, 3))
             if attack not in settings.ALLOWED_ATTACKS:
@@ -79,10 +87,10 @@ class Enemy:
             return settings.ALLOWED_ATTACKS[attack]
         except Exception as e:
             print(f"Error during enemy attack selection: {str(e)}")
-            # Return a default attack in case of error
             return settings.ALLOWED_ATTACKS['1']
     
     def decrease_life(self) -> None:
+        """Decrease enemy's life by 1."""
         self.lives -= 1
         if self.lives == 0:
             print("Enemy defeated!")
