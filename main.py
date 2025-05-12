@@ -1,9 +1,10 @@
+from game.models import Player
 from game import game
 from game import score_saver
 
 
 def user_menu():
-    user_choice = input("To start game press 1, to see results press 2, to leave the game press 3").strip().lower()
+    user_choice = input("To start game press 1, to see results press 2, to leave the game press 3: ").strip().lower()
     return user_choice
 
 def play_game():
@@ -13,10 +14,10 @@ def play_game():
         game_instance.play()
     else:
         print("Invalid game mode selected.")
-
+        
 def create_player():
     player_name = input("Enter your name: ").strip()
-    return game.Player(player_name)
+    return Player(player_name)
 
 def show_records():
     score_handler = score_saver.ScoreHandler()

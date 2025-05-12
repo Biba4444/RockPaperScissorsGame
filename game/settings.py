@@ -1,43 +1,55 @@
-"""This module contains the settings for the game. (in form of constants) """
+"""Game settings and constants."""
 
+# Game modes
 MODE_NORMAL = 'Normal'
 MODE_HARD = 'Hard'
-MODES = {'1': MODE_NORMAL,
-         '2': MODE_HARD}
-MODE_MULTIPLIERS = {MODE_NORMAL: 1, MODE_HARD: 2}
+MODES = {
+    '1': MODE_NORMAL,
+    '2': MODE_HARD
+}
+MODE_MULTIPLIERS = {
+    MODE_NORMAL: 1,
+    MODE_HARD: 2
+}
 
+# Player settings
 PLAYER_LIVES = 2
+
+# Scoring
 POINTS_FOR_FIGHT = 1
 POINTS_FOR_KILLING = 5
 MAX_RECORDS_NUMBER = 5
 EACH_LEVEL_MULTIPLIER = 1.5
-NORMAL_MODE_MULTIPLIER = 1
-HARD_MODE_MULTIPLIER = 2
 
+# File settings
 SCORE_FILE = 'score.txt'
 
+# Attack types
+ROCK = 'Rock'
 PAPER = 'Paper'
-STONE = 'Stone'
 SCISSORS = 'Scissors'
 
+# Game outcomes
 WIN = 1
 DRAW = 0
 LOSE = -1
 
+# Attack mappings
 ALLOWED_ATTACKS = {
-    '1': PAPER,
-    '2': STONE,
+    '1': ROCK,
+    '2': PAPER,
     '3': SCISSORS
 }
 
+# Attack outcomes matrix
 ATTACK_PAIRS_OUTCOME = {
+    (ROCK, ROCK): DRAW,
+    (ROCK, PAPER): LOSE,
+    (ROCK, SCISSORS): WIN,
+    (PAPER, ROCK): WIN,
     (PAPER, PAPER): DRAW,
-    (PAPER, STONE): WIN,
     (PAPER, SCISSORS): LOSE,
-    (STONE, PAPER): LOSE,
-    (STONE, STONE): DRAW,
-    (STONE, SCISSORS): WIN,
+    (SCISSORS, ROCK): LOSE,
     (SCISSORS, PAPER): WIN,
-    (SCISSORS, STONE): LOSE,
     (SCISSORS, SCISSORS): DRAW
 }
